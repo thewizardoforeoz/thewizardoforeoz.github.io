@@ -1,29 +1,99 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main Page</title>
+    <title>Contact - Email</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
             padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background-color: #f4f7fa;
+            color: #333;
+            line-height: 1.6;
         }
         h1 {
-            text-align: center;
             color: #2c3e50;
+            max-width: 600px;
+            margin: 0 auto 20px;
+            text-align: center;
+        }
+        .email-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+        .email-text {
+            color: #3498db;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
         }
         button {
-            display: block;
-            width: 200px;
-            margin: 20px
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        p {
+            color: #7f8c8d;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        #copyMessage {
+            color: #2ecc71;
+            margin-top: 10px;
+            display: none;
+        }
+        @media (max-width: 600px) {
+            .email-container {
+                padding: 15px;
+            }
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Contact</h1>
+    <p>Reach out to me via email!</p>
+
+    <div class="email-container">
+        <div class="email-text">
+            <a href="mailto:nonnamejustforsee@gmail.com">nonnamejustforsee@gmail.com</a>
+        </div>
+        <button onclick="copyEmail()">Copy Email</button>
+        <div id="copyMessage">Copied to clipboard!</div>
+    </div>
+
+    <script>
+        function copyEmail() {
+            const email = "nonnamejustforsee@gmail.com";
+            navigator.clipboard.writeText(email).then(() => {
+                const copyMessage = document.getElementById('copyMessage');
+                copyMessage.style.display = 'block';
+                setTimeout(() => {
+                    copyMessage.style.display = 'none';
+                }, 2000); // 2초 후 메시지 숨김
+            }).catch(err => {
+                alert('Failed to copy email: ' + err);
+            });
+        }
+    </script>
+</body>
+</html>
