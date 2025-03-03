@@ -1,0 +1,41 @@
+<!-- login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <h2>Login (Admin Only)</h2>
+    <form id="loginForm">
+        <label for="username">Username:</label>
+        <input type="text" id="username" placeholder="admin1103" required>
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" placeholder="admin1103" required>
+        <br>
+        <button type="submit">Login</button>
+    </form>
+    
+    <div id="errorMessage" style="color: red; display: none;">Invalid login. Please try again.</div>
+    
+    <script>
+        const adminUsername = "admin1103";  // 관리자 아이디
+        const adminPassword = "admin1103";  // 관리자 비밀번호 (하드코딩)
+
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username === adminUsername && password === adminPassword) {
+                localStorage.setItem('isAdmin', 'true');  // 관리자 인증
+                window.location.href = "guestbook.html";  // 방명록 페이지로 리디렉션
+            } else {
+                document.getElementById('errorMessage').style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
