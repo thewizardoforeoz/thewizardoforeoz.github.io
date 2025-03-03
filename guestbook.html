@@ -1,59 +1,108 @@
+<!-- guestbook.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visitor's Book</title>
+    <title>Guestbook</title>
 </head>
 <body>
-    <h1>Visitor's Book</h1>
+    <h2>Guestbook</h2>
+    
+    <!-- 방명록 주의 문구 -->
+    <div style="font-size: 14px; color: grey; margin-bottom: 10px;">
+        <p>편안하게 작성하시고, 욕설과 비방의 목적의 글은 추 후 조치가 발생하오니 주의바랍니다.</p>
+    </div>
 
+    <!-- 방명록 메시지 입력 폼 -->
     <form id="messageForm">
         <label for="name">Name:</label>
         <input type="text" id="name" required>
+        <br>
         <label for="message">Message:</label>
         <textarea id="message" required></textarea>
+        <br>
         <button type="submit">Submit</button>
     </form>
-
+    
+    <h3>Messages:</h3>
     <div id="messages"></div>
-
+    
+    <div id="adminFeatures" style="display: none;">
+        <h3>Admin Features</h3>
+        <button id="logoutButton">Logout</button>
+        <h4>Manage Messages:</h4>
+        <div id="adminMessages"></div>
+    </div>
+    
     <script>
-        // 저장된 메시지를 불러오는 함수
+        // 관리자인지 확인
+        if (localStorage.getItem('isAdmin') !== 'true') {
+            window.location.href = "login.html";  // 로그인 페이지로 리디렉션
+        }
+
+        // 메시지 저장
+        document.getElementById('messageForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const message = document.getElementById('message').value;
+            const messages = JSON.parse(localStorage.getItem('messages')) || [];
+            messages.push({ name, message });
+            localStorage.setItem('messages', JSON.stringify(messages));
+
+            loadMessages();
+        });
+
+        // 방명록 메시지 불러오기
         function loadMessages() {
             const messages = JSON.parse(localStorage.getItem('messages')) || [];
             const messageContainer = document.getElementById('messages');
             messageContainer.innerHTML = '';
-            messages.forEach(msg => {
+            messages.forEach((msg, index) => {
                 const messageElement = document.createElement('div');
-                messageElement.innerHTML = `<strong>${msg.name}</strong>: ${msg.message}`;
+                messageElement.innerHTML = `<strong>${msg.name}:</strong> ${msg.message}`;
                 messageContainer.appendChild(messageElement);
             });
+
+            // 관리자 메시지 관리 기능
+            loadAdminMessages();
         }
 
-        // 메시지를 로컬 스토리지에 저장하는 함수
-        function saveMessage(name, message) {
+        // 관리자 메시지 관리 기능
+        function loadAdminMessages() {
             const messages = JSON.parse(localStorage.getItem('messages')) || [];
-            messages.push({ name, message });
-            localStorage.setItem('messages', JSON.stringify(messages));
+            const adminMessagesContainer = document.getElementById('adminMessages');
+            adminMessagesContainer.innerHTML = '';
+
+            messages.forEach((msg, index) => {
+                const adminMessageElement = document.createElement('div');
+                adminMessageElement.innerHTML = `
+                    <strong>${msg.name}:</strong> ${msg.message} 
+                    <button onclick="deleteMessage(${index})">Delete</button>
+                `;
+                adminMessagesContainer.appendChild(adminMessageElement);
+            });
+
+            document.getElementById('adminFeatures').style.display = 'block';  // 관리자 기능 표시
         }
 
-        // 폼 제출 시 처리
-        document.getElementById('messageForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const name = document.getElementById('name').value;
-            const message = document.getElementById('message').value;
-
-            saveMessage(name, message);
+        // 메시지 삭제
+        function deleteMessage(index) {
+            const messages = JSON.parse(localStorage.getItem('messages')) || [];
+            messages.splice(index, 1);
+            localStorage.setItem('messages', JSON.stringify(messages));
             loadMessages();
+        }
 
-            // 폼 초기화
-            document.getElementById('name').value = '';
-            document.getElementById('message').value = '';
+        // 로그아웃 기능
+        document.getElementById('logoutButton').addEventListener('click', function() {
+            localStorage.removeItem('isAdmin');
+            window.location.href = "login.html";  // 로그인 페이지로 리디렉션
         });
 
-        // 페이지 로드 시 기존 메시지 불러오기
-        window.onload = loadMessages;
+        // 페이지 로딩 시 메시지 로드
+        loadMessages();
     </script>
 </body>
 </html>
