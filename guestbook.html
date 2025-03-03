@@ -27,7 +27,8 @@
         .deleteButton {
             color: red;
             cursor: pointer;
-            display: none;
+            margin-left: 10px;
+            display: none; /* 기본적으로 숨김 */
         }
         .messageContainer {
             margin-bottom: 20px;
@@ -78,29 +79,43 @@
 
     <script>
         const adminUsername = "admin1103";  // Admin Username
-        const adminPassword = "admin1103";  // Admin Password (hardcoded)
+        const adminPassword = "admin1103";  // Admin Password (하드코딩, 실무에서는 보안 강화 필요)
 
-        // Check for stored messages
+        // 저장된 메시지 불러오기
         let messages = JSON.parse(localStorage.getItem('messages')) || [];
 
-        // Display messages
+        // 관리자 로그인 상태 확인
+        let isAdmin = localStorage.getItem('isAdmin') === 'true';
+
+        // 메시지 표시 함수
         function displayMessages() {
             const messagesContainer = document.getElementById('messages');
             messagesContainer.innerHTML = '';
             messages.forEach((msg, index) => {
                 const messageDiv = document.createElement('div');
                 messageDiv.classList.add('message');
-                messageDiv.innerHTML = `<span>${msg.name}: </span>${msg.message} 
-                    <span class="deleteButton" onclick="deleteMessage(${index})">[Delete]</span>`;
+                messageDiv.innerHTML = `<span>${msg.name}: </span>${msg.message}`;
+                
+                // 관리자 로그인 상태일 때만 삭제 버튼 추가
+                if (isAdmin) {
+                    const deleteBtn = document.createElement('span');
+                    deleteBtn.classList.add('deleteButton');
+                    deleteBtn.textContent = '[Delete]';
+                    deleteBtn.style.display = 'inline'; // 관리자일 때만 보이게
+                    deleteBtn.onclick = () => deleteMessage(index);
+                    messageDiv.appendChild(deleteBtn);
+                }
+                
                 messagesContainer.appendChild(messageDiv);
             });
         }
 
-        // Handle Admin Login
+        // 관리자 로그인 버튼 클릭 시
         document.getElementById('adminButton').addEventListener('click', function() {
             document.getElementById('loginSection').style.display = 'block';
         });
 
+        // 관리자 로그인 처리
         document.getElementById('loginForm').addEventListener('submit', function(event) {
             event.preventDefault();
             const username = document.getElementById('adminUsername').value;
@@ -108,14 +123,15 @@
 
             if (username === adminUsername && password === adminPassword) {
                 localStorage.setItem('isAdmin', 'true');
+                isAdmin = true;
                 document.getElementById('loginSection').style.display = 'none';
-                displayMessages();  // Show messages and admin controls after login
+                displayMessages(); // 관리자 로그인 후 삭제 버튼 포함하여 메시지 갱신
             } else {
                 document.getElementById('loginErrorMessage').style.display = 'block';
             }
         });
 
-        // Handle Message Submission
+        // 메시지 제출 처리
         document.getElementById('messageForm').addEventListener('submit', function(event) {
             event.preventDefault();
             const name = document.getElementById('visitorName').value;
@@ -125,6 +141,7 @@
             messages.push({ name, email, message });
             localStorage.setItem('messages', JSON.stringify(messages));
 
+            // 입력 필드 초기화
             document.getElementById('visitorName').value = '';
             document.getElementById('visitorEmail').value = '';
             document.getElementById('visitorMessage').value = '';
@@ -132,9 +149,8 @@
             displayMessages();
         });
 
-        // Delete a message (only for admin)
+        // 메시지 삭제 함수 (관리자만 가능)
         function deleteMessage(index) {
-            const isAdmin = localStorage.getItem('isAdmin') === 'true';
             if (isAdmin) {
                 messages.splice(index, 1);
                 localStorage.setItem('messages', JSON.stringify(messages));
@@ -142,7 +158,7 @@
             }
         }
 
-        // Display messages on page load
+        // 페이지 로드 시 메시지 표시
         displayMessages();
     </script>
 </body>
