@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitor's Book</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="text"], input[type="email"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        textarea {
+            height: 150px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .messages {
+            margin-top: 30px;
+        }
+        .message {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        .message .name {
+            font-weight: bold;
+        }
+        .message .email {
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Visitor's Book</h1>
+
+    <form id="guestbookForm">
+        <input type="text" id="name" placeholder="Name" required><br>
+        <input type="email" id="email" placeholder="Email" required><br>
+        <textarea id="message" placeholder="Message" required></textarea><br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <div class="messages" id="messages"></div>
+</div>
+
+<script>
+    const guestbookForm = document.getElementById("guestbookForm");
+    const messagesDiv = document.getElementById("messages");
+
+    guestbookForm.addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const message = document.getElementById("message").value;
+
+        const messageDiv = document.createElement("div");
+        messageDiv.classList.add("message");
+
+        messageDiv.innerHTML = `
+            <div class="name">${name}</div>
+            <div class="email">${email}</div>
+            <div class="message-text">${message}</div>
+        `;
+
+        messagesDiv.appendChild(messageDiv);
+
+        // Clear the form
+        guestbookForm.reset();
+    });
+</script>
+
+</body>
+</html>
