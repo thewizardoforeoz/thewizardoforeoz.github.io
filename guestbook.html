@@ -1,57 +1,76 @@
-<!-- guestbook.html -->
+<!-- visitor-book.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guestbook</title>
+    <title>Visitor's Book</title>
 </head>
 <body>
-    <h2>Guestbook</h2>
+    <h2>Visitor's Book</h2>
     
-    <!-- 방명록 주의 문구 -->
-    <div style="font-size: 14px; color: grey; margin-bottom: 10px;">
-        <p>편안하게 작성하시고, 욕설과 비방의 목적의 글은 추 후 조치가 발생하오니 주의바랍니다.</p>
+    <!-- 관리자 로그인 폼 -->
+    <div id="loginSection">
+        <h3>Admin Login</h3>
+        <form id="loginForm">
+            <label for="adminUsername">Username:</label>
+            <input type="text" id="adminUsername" placeholder="admin1103" required>
+            <br>
+            <label for="adminPassword">Password:</label>
+            <input type="password" id="adminPassword" placeholder="admin1103" required>
+            <br>
+            <button type="submit">Login</button>
+        </form>
+        <div id="loginErrorMessage" style="color: red; display: none;">Invalid login. Please try again.</div>
     </div>
-
-    <!-- 방명록 메시지 입력 폼 -->
-    <form id="messageForm">
-        <label for="name">Name:</label>
-        <input type="text" id="name" required>
-        <br>
-        <label for="message">Message:</label>
-        <textarea id="message" required></textarea>
-        <br>
-        <button type="submit">Submit</button>
-    </form>
+    
+    <!-- 방명록 메시지 입력 폼 (관리자만 작성 가능) -->
+    <div id="messageSection" style="display: none;">
+        <h3>Post a Message</h3>
+        <form id="messageForm">
+            <label for="messageContent">Message:</label>
+            <textarea id="messageContent" required></textarea>
+            <br>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
     
     <h3>Messages:</h3>
     <div id="messages"></div>
     
-    <div id="adminFeatures" style="display: none;">
-        <h3>Admin Features</h3>
-        <button id="logoutButton">Logout</button>
-        <h4>Manage Messages:</h4>
-        <div id="adminMessages"></div>
-    </div>
-    
     <script>
-        // 관리자인지 확인
-        if (localStorage.getItem('isAdmin') !== 'true') {
-            window.location.href = "login.html";  // 로그인 페이지로 리디렉션
+        const adminUsername = "admin1103";  // 관리자 아이디
+        const adminPassword = "admin1103";  // 관리자 비밀번호 (하드코딩)
+        
+        // 로그인 처리
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('adminUsername').value;
+            const password = document.getElementById('adminPassword').value;
+
+            if (username === adminUsername && password === adminPassword) {
+                localStorage.setItem('isAdmin', 'true');  // 관리자 인증
+                showMessageSection();  // 메시지 폼 보이기
+            } else {
+                document.getElementById('loginErrorMessage').style.display = 'block';  // 로그인 실패 시 메시지
+            }
+        });
+
+        // 관리자만 글을 쓸 수 있게 하기 위한 함수
+        function showMessageSection() {
+            document.getElementById('loginSection').style.display = 'none';  // 로그인 폼 숨기기
+            document.getElementById('messageSection').style.display = 'block';  // 메시지 폼 보이기
+            loadMessages();  // 메시지 로드
         }
 
         // 메시지 저장
         document.getElementById('messageForm').addEventListener('submit', function(event) {
             event.preventDefault();
-            
-            const name = document.getElementById('name').value;
-            const message = document.getElementById('message').value;
+            const messageContent = document.getElementById('messageContent').value;
             const messages = JSON.parse(localStorage.getItem('messages')) || [];
-            messages.push({ name, message });
+            messages.push({ message: messageContent });
             localStorage.setItem('messages', JSON.stringify(messages));
-
-            loadMessages();
+            loadMessages();  // 메시지 새로 고침
         });
 
         // 방명록 메시지 불러오기
@@ -59,47 +78,12 @@
             const messages = JSON.parse(localStorage.getItem('messages')) || [];
             const messageContainer = document.getElementById('messages');
             messageContainer.innerHTML = '';
-            messages.forEach((msg, index) => {
+            messages.forEach(msg => {
                 const messageElement = document.createElement('div');
-                messageElement.innerHTML = `<strong>${msg.name}:</strong> ${msg.message}`;
+                messageElement.innerHTML = `<strong>Admin:</strong> ${msg.message}`;
                 messageContainer.appendChild(messageElement);
             });
-
-            // 관리자 메시지 관리 기능
-            loadAdminMessages();
         }
-
-        // 관리자 메시지 관리 기능
-        function loadAdminMessages() {
-            const messages = JSON.parse(localStorage.getItem('messages')) || [];
-            const adminMessagesContainer = document.getElementById('adminMessages');
-            adminMessagesContainer.innerHTML = '';
-
-            messages.forEach((msg, index) => {
-                const adminMessageElement = document.createElement('div');
-                adminMessageElement.innerHTML = `
-                    <strong>${msg.name}:</strong> ${msg.message} 
-                    <button onclick="deleteMessage(${index})">Delete</button>
-                `;
-                adminMessagesContainer.appendChild(adminMessageElement);
-            });
-
-            document.getElementById('adminFeatures').style.display = 'block';  // 관리자 기능 표시
-        }
-
-        // 메시지 삭제
-        function deleteMessage(index) {
-            const messages = JSON.parse(localStorage.getItem('messages')) || [];
-            messages.splice(index, 1);
-            localStorage.setItem('messages', JSON.stringify(messages));
-            loadMessages();
-        }
-
-        // 로그아웃 기능
-        document.getElementById('logoutButton').addEventListener('click', function() {
-            localStorage.removeItem('isAdmin');
-            window.location.href = "login.html";  // 로그인 페이지로 리디렉션
-        });
 
         // 페이지 로딩 시 메시지 로드
         loadMessages();
