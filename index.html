@@ -21,17 +21,19 @@
         }
         h1 {
             text-align: center;
+            color: #2c3e50;
         }
         button {
             display: block;
             width: 200px;
-            margin: 30px auto;
+            margin: 20px auto;
             padding: 10px;
             background-color: #4CAF50;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
         button:hover {
             background-color: #45a049;
@@ -39,20 +41,23 @@
     </style>
 </head>
 <body>
-
-<div class="container">
-    <h1>Main Page</h1>
-    
-    <!-- 방명록 페이지로 이동하는 버튼 -->
-    <a href="guestbook.html">
-        <button>Visit Visitor's Book</button>
-    </a>
-    
-    <!-- 인터뷰 페이지로 이동하는 버튼 -->
-    <a href="interview.html">
-        <button>Interview</button>
-    </a>
-</div>
-
+    <div class="container">
+        <h1>Main Page</h1>
+        
+        <!-- 방명록 페이지로 이동하는 버튼 -->
+        <a href="guestbook.html">
+            <button>Visit Visitor's Book</button>
+        </a>
+        
+        <!-- 인터뷰 페이지로 이동하는 버튼 -->
+        <a href="interview.html">
+            <button>Interview</button>
+        </a>
+        
+        <!-- MOOD 페이지로 이동하는 버튼 -->
+        <a href="mood.html">
+            <button>MOOD</button>
+        </a>
+    </div>
 </body>
 </html>
