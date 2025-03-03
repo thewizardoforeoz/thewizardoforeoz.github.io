@@ -1,92 +1,142 @@
-<!-- visitor-book.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visitor's Book</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #loginSection, #messageSection {
+            margin-bottom: 20px;
+        }
+        #loginSection input, #messageSection input, #messageSection textarea {
+            margin-top: 10px;
+        }
+        #loginSection button {
+            margin-top: 10px;
+        }
+        .message {
+            margin-top: 10px;
+        }
+        .message span {
+            font-weight: bold;
+        }
+        .deleteButton {
+            color: red;
+            cursor: pointer;
+            display: none;
+        }
+        .messageContainer {
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
     <h2>Visitor's Book</h2>
-    
-    <!-- 관리자 로그인 폼 -->
+
+    <p>Feel free to leave your message!</p>
+    <p>* Please note: Messages with inappropriate content may result in action being taken.</p>
+
+    <!-- Admin Login Section -->
     <div id="loginSection">
         <h3>Admin Login</h3>
         <form id="loginForm">
             <label for="adminUsername">Username:</label>
-            <input type="text" id="adminUsername" placeholder="admin1103" required>
-            <br>
+            <input type="text" id="adminUsername" placeholder="Enter Username" required><br>
             <label for="adminPassword">Password:</label>
-            <input type="password" id="adminPassword" placeholder="admin1103" required>
-            <br>
+            <input type="password" id="adminPassword" placeholder="Enter Password" required><br>
             <button type="submit">Login</button>
         </form>
         <div id="loginErrorMessage" style="color: red; display: none;">Invalid login. Please try again.</div>
     </div>
-    
-    <!-- 방명록 메시지 입력 폼 (관리자만 작성 가능) -->
+
+    <!-- Message Section (for adding messages) -->
     <div id="messageSection" style="display: none;">
-        <h3>Post a Message</h3>
+        <h3>Leave a Message</h3>
         <form id="messageForm">
-            <label for="messageContent">Message:</label>
-            <textarea id="messageContent" required></textarea>
-            <br>
+            <label for="visitorName">Name:</label>
+            <input type="text" id="visitorName" required><br>
+            <label for="visitorEmail">Email:</label>
+            <input type="email" id="visitorEmail" required><br>
+            <label for="visitorMessage">Message:</label>
+            <textarea id="visitorMessage" required></textarea><br>
             <button type="submit">Submit</button>
         </form>
     </div>
-    
-    <h3>Messages:</h3>
-    <div id="messages"></div>
-    
+
+    <div id="messagesContainer">
+        <h3>Messages:</h3>
+        <div id="messages"></div>
+    </div>
+
     <script>
-        const adminUsername = "admin1103";  // 관리자 아이디
-        const adminPassword = "admin1103";  // 관리자 비밀번호 (하드코딩)
-        
-        // 로그인 처리
+        const adminUsername = "admin1103";  // Admin Username
+        const adminPassword = "admin1103";  // Admin Password (hardcoded)
+
+        // Check for stored messages
+        let messages = JSON.parse(localStorage.getItem('messages')) || [];
+
+        // Display messages
+        function displayMessages() {
+            const messagesContainer = document.getElementById('messages');
+            messagesContainer.innerHTML = '';
+            messages.forEach((msg, index) => {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                messageDiv.innerHTML = `<span>${msg.name}: </span>${msg.message} 
+                    <span class="deleteButton" onclick="deleteMessage(${index})">[Delete]</span>`;
+                messagesContainer.appendChild(messageDiv);
+            });
+        }
+
+        // Handle Admin Login
         document.getElementById('loginForm').addEventListener('submit', function(event) {
             event.preventDefault();
             const username = document.getElementById('adminUsername').value;
             const password = document.getElementById('adminPassword').value;
 
             if (username === adminUsername && password === adminPassword) {
-                localStorage.setItem('isAdmin', 'true');  // 관리자 인증
-                showMessageSection();  // 메시지 폼 보이기
+                localStorage.setItem('isAdmin', 'true');
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('messageSection').style.display = 'block';
+                displayMessages();
             } else {
-                document.getElementById('loginErrorMessage').style.display = 'block';  // 로그인 실패 시 메시지
+                document.getElementById('loginErrorMessage').style.display = 'block';
             }
         });
 
-        // 관리자만 글을 쓸 수 있게 하기 위한 함수
-        function showMessageSection() {
-            document.getElementById('loginSection').style.display = 'none';  // 로그인 폼 숨기기
-            document.getElementById('messageSection').style.display = 'block';  // 메시지 폼 보이기
-            loadMessages();  // 메시지 로드
-        }
-
-        // 메시지 저장
+        // Handle Message Submission
         document.getElementById('messageForm').addEventListener('submit', function(event) {
             event.preventDefault();
-            const messageContent = document.getElementById('messageContent').value;
-            const messages = JSON.parse(localStorage.getItem('messages')) || [];
-            messages.push({ message: messageContent });
+            const name = document.getElementById('visitorName').value;
+            const email = document.getElementById('visitorEmail').value;
+            const message = document.getElementById('visitorMessage').value;
+
+            messages.push({ name, email, message });
             localStorage.setItem('messages', JSON.stringify(messages));
-            loadMessages();  // 메시지 새로 고침
+
+            document.getElementById('visitorName').value = '';
+            document.getElementById('visitorEmail').value = '';
+            document.getElementById('visitorMessage').value = '';
+
+            displayMessages();
         });
 
-        // 방명록 메시지 불러오기
-        function loadMessages() {
-            const messages = JSON.parse(localStorage.getItem('messages')) || [];
-            const messageContainer = document.getElementById('messages');
-            messageContainer.innerHTML = '';
-            messages.forEach(msg => {
-                const messageElement = document.createElement('div');
-                messageElement.innerHTML = `<strong>Admin:</strong> ${msg.message}`;
-                messageContainer.appendChild(messageElement);
-            });
+        // Delete a message (only for admin)
+        function deleteMessage(index) {
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
+            if (isAdmin) {
+                messages.splice(index, 1);
+                localStorage.setItem('messages', JSON.stringify(messages));
+                displayMessages();
+            }
         }
 
-        // 페이지 로딩 시 메시지 로드
-        loadMessages();
+        // Display messages on page load
+        displayMessages();
     </script>
 </body>
 </html>
