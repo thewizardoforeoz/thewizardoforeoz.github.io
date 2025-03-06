@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Main Page</title>
+    <title>Fantasia Library</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,43 +11,23 @@
             margin: 0;
             padding: 0;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            text-align: center;
         }
         .container {
-            text-align: center;
             background: white;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
         }
         h1 {
             color: #2c3e50;
-        }
-        button {
-            display: inline-block;
-            padding: 10px 20px;
-            margin-top: 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-
-          .faq-container {
-            max-width: 600px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
         }
         .faq-item {
             border-bottom: 1px solid #ddd;
@@ -74,72 +54,72 @@
         }
         .faq-question.active::after {
             transform: rotate(180deg);
+        }
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
-
-    <div class="faq-container">
-    <div class="faq-item">
-        <div class="faq-question">What is Fantasia Library Slogan?</div>
-        <div class="faq-answer">
-            우리는 당신의 일기와 같은 옷을 고서에 참고해서 판타지아로 만듭니다.
+    <div class="container">
+        <h1>Fantasia Library</h1>
+        
+        <div class="faq-item">
+            <div class="faq-question">What is Fantasia Library Slogan?</div>
+            <div class="faq-answer">
+                우리는 당신의 일기와 같은 옷을 고서에 참고해서 판타지아로 만듭니다.
+            </div>
         </div>
-    </div>
 
-    <div class="faq-item">
-        <div class="faq-question">What is Fantasia Library Report?</div>
-        <div class="faq-answer">
-            만년입는 옷 위에 찰나를 머금은 옷<br><br>
-            새와 물고기는 잉태하여 알로써, 그리고 본연의 존재로써 두번 자신의 모습을 맞이 합니다.<br><br>
-            옷도 그렇습니다. 실로 시작하여 원단에서 완성품으로 끝납니다. 하지만 우리와 함께라면 옷에 세번째 모습을 부여할 수 있습니다.<br><br>
-            중력도 거스르는 새와 물고기처럼 빛을 받기도 어둠을 막아내는 그런 존재 보다 더 당신에겐 값진 나의 옷.<br><br>
-            판타지아 라이브러리에서는 당연합니다.
+        <div class="faq-item">
+            <div class="faq-question">What is Fantasia Library Report?</div>
+            <div class="faq-answer">
+                만년입는 옷 위에 찰나를 머금은 옷<br><br>
+                새와 물고기는 잉태하여 알로써, 그리고 본연의 존재로써 두번 자신의 모습을 맞이 합니다.<br><br>
+                옷도 그렇습니다. 실로 시작하여 원단에서 완성품으로 끝납니다. 하지만 우리와 함께라면 옷에 세번째 모습을 부여할 수 있습니다.<br><br>
+                중력도 거스르는 새와 물고기처럼 빛을 받기도 어둠을 막아내는 그런 존재 보다 더 당신에겐 값진 나의 옷.<br><br>
+                판타지아 라이브러리에서는 당연합니다.
+            </div>
         </div>
-    </div>
 
-    <div class="faq-item">
-        <div class="faq-question">How to contact Fantasia Library?</div>
-        <div class="faq-answer">
-            instagram : <a href="https://www.instagram.com/fantasialibrary/" target="_blank">https://www.instagram.com/fantasialibrary/</a>
+        <div class="faq-item">
+            <div class="faq-question">How to contact Fantasia Library?</div>
+            <div class="faq-answer">
+                Instagram : <a href="https://www.instagram.com/fantasialibrary/" target="_blank">https://www.instagram.com/fantasialibrary/</a><br>
+                Email : <a href="mailto:mongshilisgood@gmail.com">mongshilisgood@gmail.com</a>
+            </div>
         </div>
+        
+        <div class="button-container">
+        <p>버튼을 눌러 작품을 감상하세요</p>
+        <a href="Vol23.html"><button>Vol. 123</button></a>
+        <a href="Vol18.html"><button>Vol. 18</button></a>
     </div>
-</div>
     
-    <div class="faq-item">
-    <div class="faq-question">How to contact Fantasia Library?</div>
-    <div class="faq-answer">
-        instagram : <a href="https://www.instagram.com/fantasialibrary/" target="_blank">https://www.instagram.com/fantasialibrary/</a><br>
-        email : <a href="mailto:mongshilisgood@gmail.com">mongshilisgood@gmail.com</a>
-    </div>
-</div>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const questions = document.querySelectorAll(".faq-question");
-
-        questions.forEach(question => {
-            question.addEventListener("click", function () {
-                this.classList.toggle("active");
-                const answer = this.nextElementSibling;
-                if (answer.style.display === "block") {
-                    answer.style.display = "none";
-                } else {
-                    answer.style.display = "block";
-                }
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const questions = document.querySelectorAll(".faq-question");
+            questions.forEach(question => {
+                question.addEventListener("click", function () {
+                    this.classList.toggle("active");
+                    const answer = this.nextElementSibling;
+                    answer.style.display = (answer.style.display === "block") ? "none" : "block";
+                });
             });
         });
-    });
-</script>
-        
-        <a href="Vol23.html">
-            <button>Vol. 123</button>
-        </a>
-        
-        <a href="Vol.18.html">
-        <button>Vol. 18</button>
-</a>
-
-        
-    </div>
+    </script>
 </body>
 </html>
